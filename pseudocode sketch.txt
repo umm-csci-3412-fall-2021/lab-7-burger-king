@@ -5,7 +5,6 @@ Packets know how big they are; check that when being fed into the factory?
 Packet abstract class:
   - Has a status byte(?)
   - Has a byte fileID
-  - Has a byte[] packetBody?  (Does it need this?) (consisting of all but the first two bytes? Or all of them?  Possibly defined differently for HeaderPacket and DataPacket with the latter not counting the first four)
 
 HeaderPacket class:
   - Found within Packet
@@ -18,6 +17,7 @@ DataPacket class:
   - Has a boolean isFinal
   - Has an int packetNumber
   - Has a getter for the meaningful packet body in raw byte[] form
+  - Has a byte[] packetBody?  (Does it need this?) (consisting of all but the first two bytes? Or all of them?  Possibly defined differently for HeaderPacket and DataPacket with the latter not counting the first four)
 
 PacketFactory class:
   - Has a buildPacket function which:
