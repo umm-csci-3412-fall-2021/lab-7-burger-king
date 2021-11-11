@@ -1,0 +1,36 @@
+Packets know how big they are; check that when being fed into the factory?
+
+
+
+Packet abstract class:
+  - Has a status byte(?)
+  - Has a byte fileID
+  - Has a byte[] packetBody?  (Does it need this?) (consisting of all but the first two bytes? Or all of them?  Possibly defined differently for HeaderPacket and DataPacket with the latter not counting the first four)
+
+HeaderPacket class:
+  - Implements Packet
+  - Has a String fileName
+
+DataPacket class:
+  - Implements Packet
+  - Has a boolean isFinal
+  - Has an int packetNumber
+  - Has a getter for the meaningful packet body in raw byte[] form
+
+PacketFactory class:
+  - Has a buildPacket function which:
+    - Takes a DatagramPacket
+    - Returns a Packet newPacket;
+    - Calls getData() on the function and stores it in a byte[] packetData
+    - Takes the first byte and calls it statusByte.
+    - Observes and switches on the least significant status bit of the status (statusByte & 1).  If true (i.e. is a header packet)
+      - Create a new HeaderPacket and assign it to newPacket;
+      - Set newPacket's fileName to be the result of assigning the remainder of the packet data into a string.  (Turn each individual byte into a char, feed it into a StringWriter, and then turn that all into a String.)
+    - Else:
+      - Create a new DataPacket and assign it to newPacket;
+      - Sets newPacket's isFinal to the status byte's second bit (statusByte >> 1 & 1)
+      - Sets packetNumber from the next two bits
+      - Sets the packetBody to the rest of packetData
+
+FileBuilder class:
+
