@@ -27,7 +27,7 @@ PacketFactory class:
     - Takes the first byte and calls it statusByte.
     - Observes and switches on the least significant status bit of the status (statusByte & 1).  If true (i.e. is a header packet)
       - Create a new HeaderPacket and assign it to newPacket;
-      - Set newPacket's fileName to be the result of assigning the remainder of the packet data into a string.  (Turn each individual byte into a char, feed it into a StringWriter, and then turn that all into a String.)
+      - Set newPacket's fileName to be the result of assigning the remainder of the packet data into a string.  (String has a constructor for this exactly.)
     - Else:
       - Create a new DataPacket and assign it to newPacket;
       - Sets newPacket's isFinal to the status byte's second bit (statusByte >> 1 & 1)

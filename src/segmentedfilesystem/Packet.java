@@ -8,15 +8,15 @@ public abstract class Packet {
     
 
 
-    protected class HeaderPacket extends Packet{
-        protected String fileName;
+    public class HeaderPacket extends Packet{
+        String fileName;
 
         public String getFileName(){
             return fileName;
         }
     }
     
-    protected class DataPacket extends Packet{
+    public class DataPacket extends Packet{
         public boolean isFinal;
 
         int packetNumber;
