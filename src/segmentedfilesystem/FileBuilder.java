@@ -28,7 +28,7 @@ public class FileBuilder {
     public FileBuilder(){
         status = FileBuilderStatus.AWAITING_NAME;
         nextPacketNumber = 0;
-    };
+    }
 
     public void addPacket(HeaderPacket hp) throws FileNotFoundException, IOException{
         fileName = hp.getFileName();

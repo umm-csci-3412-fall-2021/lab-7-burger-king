@@ -2,6 +2,8 @@
 # Created by https://www.gitignore.io/api/vim,java,emacs,eclipse,intellij,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=vim,java,emacs,eclipse,intellij,visualstudiocode
 
+.authtoken
+
 ### Eclipse ###
 .metadata
 bin/

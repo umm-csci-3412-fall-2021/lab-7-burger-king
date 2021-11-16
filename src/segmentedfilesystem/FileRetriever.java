@@ -1,18 +1,54 @@
 package segmentedfilesystem;
 
 import java.util.HashMap;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ConnectException;
+import java.net.Socket;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 public class FileRetriever {
 
+        InetAddress serverAddress;
+        int port;
+        PacketFactory factory;
+        HashMap<Byte, FileBuilder> fileBuilders;
+        int numFiles = 3;
+
 	public FileRetriever(String server, int port) {
-        // Save the server and port for use in `downloadFiles()`
-        //...
+                this.serverAddress = InetAddress.getByName(server);
+                this.port = port;
+                factory = new PacketFactory();
+                fileBuilders = new HashMap<Byte, FileBuilder>();
+
 	}
 
-	public void downloadFiles() {
+	public void downloadFiles() throws IOException, ConnectException{
+                /**
+                Socket sock = new Socket(server, port);
+                InputStream sockIn = sock.getInputStream();
+                OuputStream sockOut = sock.getOutputStream();
+                */
 
-                PacketFactory factory = new PacketFactory();
-                HashMap<Byte, FileBuilder> fileBuilders = new HashMap<Byte, FileBuilder>();
+                DatagramSocket sock = new DatagramSocket(port, serverAddress);
+                sock.connect(server, port);
+                DatagramPacket packetOut = new DatagramPacket(new byte[1], serverAddress, port);
+                sock.send(packetOut);
+                
+                byte[] byteBufferIn = new byte[1028]; 
+                DatagramPacket packetIn = new DatagramPacket(byteBufferIn, 1028);
+                while(true){
+                        packetIn = sock.receive();
+                        addPacketToBuilder(packetIn);
+                        if(fileBuilders.size == numFiles && allBuildersFinished()){
+                                break;
+                        }
+                }
+
+
                 
         // Do all the heavy lifting here.
         // This should
