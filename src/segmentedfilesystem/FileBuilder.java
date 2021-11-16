@@ -1,7 +1,12 @@
 package segmentedfilesystem;
 
-import Java.util.PriorityQueue;
-import Java.util.FileOutputStream;
+import segmentedfilesystem.Packet.*;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class FileBuilder {
 
@@ -17,26 +22,26 @@ public class FileBuilder {
     
 
     public boolean isFinished() {
-        return (status == COMPLETE || status == ERROR);
+        return (status == FileBuilderStatus.COMPLETE || status == FileBuilderStatus.ERROR);
     }
 
     public FileBuilder(){
-        status = AWAITING_NAME;
+        status = FileBuilderStatus.AWAITING_NAME;
         nextPacketNumber = 0;
     };
 
-    public void addPacket(HeaderPacket hp){
+    public void addPacket(HeaderPacket hp) throws FileNotFoundException, IOException{
         fileName = hp.getFileName();
         writer = new FileOutputStream(fileName);
-        status = WRITING;
+        status = FileBuilderStatus.WRITING;
         writeFromQueue();
     }
 
-    public void addPacket(DataPacket dp){
-        if(status == WRITING && dp.getPacketNumber() == nextPacketNumber){
+    public void addPacket(DataPacket dp) throws IOException{
+        if(status == FileBuilderStatus.WRITING && dp.getPacketNumber() == nextPacketNumber){
             writer.write(dp.getPacketBody());
-            if(dp.isFinal()){
-                status = COMPLETE;
+            if(dp.isFinal){
+                status = FileBuilderStatus.COMPLETE;
             } else {
                 writeFromQueue();
             }
@@ -45,13 +50,13 @@ public class FileBuilder {
         }
     }
 
-    private void writeFromQueue(){
+    private void writeFromQueue() throws IOException{
         while(true){
-            DataPacket nextDP = packetQueue.peek()
-            if(nextDP != null && nextDP.getPacketNumber == nextPacketNumber){
-                writer.write(nextDP.getPacketBody);
+            DataPacket nextDP = packetQueue.peek();
+            if(nextDP != null && nextDP.getPacketNumber() == nextPacketNumber){
+                writer.write(nextDP.getPacketBody());
                 if(nextDP.isFinal){
-                    status = COMPLETE;
+                    status = FileBuilderStatus.COMPLETE;
                     break;
                 } else {
                     nextPacketNumber++;
@@ -67,7 +72,7 @@ public class FileBuilder {
     private class PacketComparator implements Comparator<DataPacket> {
 
         @Override
-        public boolean compare(DataPacket o1, DataPacket o2) {
+        public int compare(DataPacket o1, DataPacket o2) {
             return o1.getPacketNumber() - o2.getPacketNumber();
         }
     }

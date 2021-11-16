@@ -1,5 +1,7 @@
 package segmentedfilesystem;
 
+import java.util.HashMap;
+
 public class FileRetriever {
 
 	public FileRetriever(String server, int port) {
