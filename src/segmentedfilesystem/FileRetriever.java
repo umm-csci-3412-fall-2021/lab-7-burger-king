@@ -8,6 +8,10 @@ public class FileRetriever {
 	}
 
 	public void downloadFiles() {
+
+                PacketFactory factory = new PacketFactory();
+                HashMap<Byte, FileBuilder> fileBuilders = new HashMap<Byte, FileBuilder>();
+                
         // Do all the heavy lifting here.
         // This should
         //   * Connect to the server
