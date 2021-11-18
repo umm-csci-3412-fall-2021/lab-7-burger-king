@@ -3,8 +3,6 @@ package segmentedfilesystem;
 import java.net.DatagramPacket;
 import java.util.Arrays;
 
-import segmentedfilesystem.Packet.*;
-
 public class PacketFactory {
 
     public PacketFactory(){};
@@ -16,7 +14,7 @@ public class PacketFactory {
         int inputLength = input.getLength();
         byte statusByte = packetData[0];
 
-        if((statusByte & 1) == 1){
+        if((statusByte & 1) == 0){
             newPacket = new HeaderPacket();
             ((HeaderPacket) newPacket).fileName = new String(packetData, 2, inputLength - 2);
         } else {

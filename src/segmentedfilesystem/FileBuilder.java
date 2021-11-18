@@ -1,7 +1,5 @@
 package segmentedfilesystem;
 
-import segmentedfilesystem.Packet.*;
-
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.io.FileNotFoundException;
@@ -47,6 +45,16 @@ public class FileBuilder {
             }
         } else {
             packetQueue.offer(dp);
+        }
+    }
+
+    public void addPacket(Packet p) throws FileNotFoundException, IOException {
+        if(p instanceof DataPacket){
+            addPacket((DataPacket) p);
+        } else if (p instanceof HeaderPacket){
+            addPacket((HeaderPacket) p);
+        } else {
+            throw new UnsupportedOperationException();
         }
     }
 
