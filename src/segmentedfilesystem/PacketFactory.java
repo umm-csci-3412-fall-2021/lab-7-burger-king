@@ -16,12 +16,12 @@ public class PacketFactory {
 
         if((statusByte & 1) == 0){
             newPacket = new HeaderPacket();
-            ((HeaderPacket) newPacket).fileName = new String(packetData, 2, inputLength - 2);
+            ((HeaderPacket) newPacket).fileName = new String(packetData, 2, inputLength - 2).replace("\0", "");
         } else {
             newPacket = new DataPacket();
             ((DataPacket) newPacket).isFinal = ((statusByte >> 1) & 1) == 1;
             ((DataPacket) newPacket).packetNumber = (Byte.toUnsignedInt(packetData[2]) * 256) + Byte.toUnsignedInt(packetData[3]);
-            ((DataPacket) newPacket).packetBody = Arrays.copyOfRange(packetData, 4, inputLength - 1);
+            ((DataPacket) newPacket).packetBody = Arrays.copyOfRange(packetData, 4, inputLength);
         }
         newPacket.fileID = packetData[1];
         return newPacket;

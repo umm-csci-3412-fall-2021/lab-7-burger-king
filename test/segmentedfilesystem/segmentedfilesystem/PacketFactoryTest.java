@@ -91,5 +91,32 @@ public class PacketFactoryTest {
         assertTrue(testResult instanceof DataPacket);
         assertArrayEquals(testBody, ((DataPacket) testResult).getPacketBody());
     }
+
+    @Test
+    public void setPartialPacketBody(){
+        Packet testResult;
+
+        packetByteBuffer[0] = (byte) 3;
+        packetByteBuffer[4] = (byte) 1;
+
+        testResult = factory.buildPacket(testingPacket);
+        //assertEquals(1, ((DataPacket) testResult).getPacketBody().length);
+        assertEquals((byte) 1, ((DataPacket) testResult).getPacketBody()[0]);
+    }
+
+    @Test
+    public void setPacketNumber(){
+        Packet testResult;
+
+        packetByteBuffer[0] = (byte) 1;
+        packetByteBuffer[3] = (byte) 4;
+        testResult = factory.buildPacket(testingPacket);
+        assertEquals(4, ((DataPacket) testResult).getPacketNumber());
+
+        packetByteBuffer[2] = 1;
+        testResult = factory.buildPacket(testingPacket);
+        assertEquals(260, ((DataPacket) testResult).getPacketNumber());
+
+    }
     
 }
