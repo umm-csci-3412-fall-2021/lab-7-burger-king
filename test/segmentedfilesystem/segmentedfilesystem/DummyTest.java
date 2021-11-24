@@ -9,11 +9,12 @@ import org.junit.Test;
  * something meaningful in your context and populate it with
  * useful tests.
  */
-public class DummyTest {
+
+/* public class DummyTest {
 
     @Test
     public void test() {
         fail("Not yet implemented");
     }
 
-}
+} */
