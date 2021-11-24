@@ -38,6 +38,7 @@ public class FileBuilder {
     public void addPacket(DataPacket dp) throws IOException{
         if(status == FileBuilderStatus.WRITING && dp.getPacketNumber() == nextPacketNumber){
             writer.write(dp.getPacketBody());
+            nextPacketNumber++;
             if(dp.isFinal){
                 status = FileBuilderStatus.COMPLETE;
             } else {
@@ -63,11 +64,11 @@ public class FileBuilder {
             DataPacket nextDP = packetQueue.peek();
             if(nextDP != null && nextDP.getPacketNumber() == nextPacketNumber){
                 writer.write(nextDP.getPacketBody());
+                packetQueue.poll();
+                nextPacketNumber++;
                 if(nextDP.isFinal){
                     status = FileBuilderStatus.COMPLETE;
                     break;
-                } else {
-                    nextPacketNumber++;
                 }
             } else {
                 break;
